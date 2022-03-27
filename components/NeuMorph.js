@@ -1,0 +1,62 @@
+import React from "react";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  SaveAreaView,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
+
+const NeuMorph = ({ children, size, style, color }) => {
+  return (
+    <View style={styles.topShadow}>
+      <View style={styles.bottomShadow}>
+        <TouchableOpacity
+          style={[
+            styles.inner,
+            {
+              width: size || 50,
+              height: size || 50,
+              borderRadius: size / 2 || 50 / 2,
+            },
+            style,
+          ]}
+        >
+          {children}
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default NeuMorph;
+
+const styles = StyleSheet.create({
+  inner: {
+    backgroundColor: "#E3E6EC",
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#D6DCE8",
+    borderWidth: 0.5,
+  },
+  topShadow: {
+    shadowOffset: {
+      width: -12,
+      height: -8,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 6,
+    shadowColor: "#FBFFFF",
+  },
+  bottomShadow: {
+    shadowOffset: {
+      width: 10,
+      height: 10,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 6,
+    shadowColor: "#D1D9E6",
+  },
+});
