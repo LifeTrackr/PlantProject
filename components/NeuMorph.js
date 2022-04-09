@@ -9,11 +9,12 @@ import {
   TextInput,
 } from "react-native";
 
-const NeuMorph = ({ children, size, style, color }) => {
+const NeuMorph = ({ children, size, style, color, onPress }) => {
   return (
     <View style={styles.topShadow}>
       <View style={styles.bottomShadow}>
         <TouchableOpacity
+          onPress={onPress}
           style={[
             styles.inner,
             {
@@ -44,10 +45,10 @@ const styles = StyleSheet.create({
   topShadow: {
     shadowOffset: {
       width: -12,
-      height: -8,
+      height: -12,
     },
     shadowOpacity: 1,
-    shadowRadius: 6,
+    shadowRadius: 9,
     shadowColor: "#FBFFFF",
   },
   bottomShadow: {

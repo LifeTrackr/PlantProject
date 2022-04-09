@@ -1,27 +1,20 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Provider } from "react-redux";
-// import rootReducers from "./redux/reducers"
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
+import store from "./redux/configureStore";
+import { useDispatch, useSelector } from "react-redux";
 import Tabs from "./navigation/Tabs";
-
+import SignIn from "./screens/Login/SignIn";
+import SignUp from "./screens/Login/SignUp";
+import Main from "./Main";
 // const store = createStore(rootReducers, applyMiddleware(thunk));
 const Stack = createStackNavigator();
 
-const App = () => {
+export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Landing">
-        <Stack.Screen
-          name="Landing"
-          component={Tabs}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <Main />
+    </Provider>
   );
-};
-
-export default App;
+}

@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,11 +9,18 @@ import {
   Image,
 } from "react-native";
 import Reminders from "../screens/Reminders";
+import SignUp from "../screens/Login/SignUp";
+import SignIn from "../screens/Login/SignIn";
+import CompanionPage from "../screens/companionPage";
 import Settings from "../screens/Settings";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Logs from "../screens/Logs";
 import Companions from "../screens/Companions";
 import { LinearGradient } from "expo-linear-gradient";
+import { useDispatch, useSelector } from "react-redux";
+import { getUsers, createUser, getToken } from "../redux/reducers/users";
+import * as SecureStore from "expo-secure-store";
+
 const Tab = createBottomTabNavigator();
 const Tabs = () => {
   return (
@@ -25,7 +33,6 @@ const Tabs = () => {
           position: "absolute",
           elevation: 0,
           backgroundColor: "white",
-          opacity: 0.6,
           borderRadius: 20,
           ...styles.shadow,
         },

@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontFamily: "Nunito_600SemiBold",
     fontSize: 23,
+    color: "#3E3E3E",
   },
   searchBar: {
     width: "85%",

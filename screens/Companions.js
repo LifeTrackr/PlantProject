@@ -73,6 +73,35 @@ const Companions = ({ navigator }) => {
                     }}
                   />
                 </View>
+                <View style={styles.textContainer}>
+                  <Text style={styles.name}>Aloe</Text>
+                  <Text style={styles.lastAction}>Reminders: Watering</Text>
+                </View>
+                <NeuMorph style={{ left: 40 }} size={40}>
+                  <Icon name="dots-vertical" color="#3F4A62" size={28} />
+                </NeuMorph>
+              </View>
+            </View>
+          </NeuMorphRec>
+
+          <NeuMorphRec style={{ borderRadius: 10, marginTop: 20 }}>
+            <View style={styles.component}>
+              <View style={styles.contentContainer}>
+                <View style={styles.imageContainer}>
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: "https://tractive.com/blog/wp-content/uploads/2018/11/header_image_home_alone_dog-768x576.jpg",
+                    }}
+                  />
+                </View>
+                <View style={styles.textContainer}>
+                  <Text style={styles.name}>Charlie</Text>
+                  <Text style={styles.lastAction}>Reminders: Feeding</Text>
+                </View>
+                <NeuMorph style={{ left: 40 }} size={40}>
+                  <Icon name="dots-vertical" color="#3F4A62" size={28} />
+                </NeuMorph>
               </View>
             </View>
           </NeuMorphRec>
@@ -121,10 +150,9 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     marginTop: 30,
     width: "85%",
-    justifyContent: "space-between",
     alignSelf: "center",
   },
   component: {
@@ -162,20 +190,20 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flexDirection: "column",
-    width: 100,
+    left: 12,
+    height: 45,
+    width: 210,
+    top: 2,
+    overflow: "hidden",
   },
   name: {
     fontFamily: "Nunito_700Bold",
-    fontSize: 19,
-    left: 3,
+    fontSize: 17,
     color: "#3E3E3E",
-    bottom: 1,
   },
   lastAction: {
     fontFamily: "Nunito_400Regular",
-    fontSize: 14,
-    left: 3,
-    bottom: 2,
+    fontSize: 12,
     color: "#6B6B6B",
   },
 });

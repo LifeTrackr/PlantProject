@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
       height: 10,
     },
     shadowOpacity: 1,
-    shadowRadius: 6,
+    shadowRadius: 10,
     shadowColor: "#D1D9E6",
   },
 });
