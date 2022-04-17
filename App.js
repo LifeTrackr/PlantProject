@@ -8,8 +8,27 @@ import Tabs from "./navigation/Tabs";
 import SignIn from "./screens/Login/SignIn";
 import SignUp from "./screens/Login/SignUp";
 import Main from "./Main";
+import { getCompanions } from "./redux/reducers/companions";
 // const store = createStore(rootReducers, applyMiddleware(thunk));
 const Stack = createStackNavigator();
+// const [tokenID, setTokenID] = useState(null);
+
+// useEffect(() => {
+//   let cleanup = false;
+
+//   const getToken = async () => {
+//     let token1 = await SecureStore.getItemAsync("token");
+//     if (!cleanup) {
+//       setTokenID(token1);
+//       token1 = null;
+//       if (tokenID) {
+//         dispatch(getCompanions(tokenID));
+//       }
+//     }
+//   };
+//   getToken();
+//   return () => (cleanup = true);
+// }, [token]);
 
 export default function App() {
   return (

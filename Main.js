@@ -7,27 +7,64 @@ import { useDispatch, useSelector } from "react-redux";
 import Tabs from "./navigation/Tabs";
 import SignIn from "./screens/Login/SignIn";
 import SignUp from "./screens/Login/SignUp";
+import CompanionPage from "./screens/companionPage";
+import Reminders from "./screens/Reminders";
+import Companions from "./screens/Companions";
+import Settings from "./screens/Settings";
 import { getUsers, createUser, getToken } from "./redux/reducers/users";
+import { getCompanions, getEvents } from "./redux/reducers/companions";
 import * as SecureStore from "expo-secure-store";
+import LottieView from "lottie-react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  Image,
+} from "react-native";
 const Stack = createStackNavigator();
 
 export default function Main() {
   const dispatch = useDispatch();
-  const { users, error, user, token } = useSelector((state) => state.users);
+  const { users, error, user, token, loading } = useSelector(
+    (state) => state.users
+  );
+  const { companions } = useSelector((state) => state.companions);
+  const errorGetCom = useSelector((state) => state.companions.companions);
   const [tokenID, setTokenID] = useState(null);
 
   useEffect(() => {
+    let cleanup = false;
     const getToken = async () => {
+      //await SecureStore.deleteItemAsync("token");
       let token1 = await SecureStore.getItemAsync("token");
-      setTokenID(token1);
-      token1 = null;
+      if (!cleanup) {
+        setTokenID(token1);
+        token1 = null;
+        if (tokenID) {
+          dispatch(getCompanions(tokenID));
+          dispatch(getEvents(tokenID));
+        }
+      }
     };
     getToken();
-  }, [token]);
+    return () => (cleanup = true);
+  }, [token, tokenID]);
 
-  console.log("this is main");
+  console.log(error);
   console.log(tokenID);
-  console.log(token);
+  // console.log(token);
+  console.log(companions);
+  console.log(errorGetCom);
+
+  if (loading) {
+    return (
+      <View style={[StyleSheet.absoluteFillObject, styles.container]}>
+        <LottieView source={require("./95967-loader.json")} autoPlay loop />
+      </View>
+    );
+  }
 
   if (!tokenID) {
     return (
@@ -55,8 +92,28 @@ export default function Main() {
             component={Tabs}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="CompanionOverview"
+            component={CompanionPage}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="Settings"
+            component={Settings}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    zIndex: 1,
+    justifyContent: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
+  },
+});

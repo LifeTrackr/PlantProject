@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderColor: "#D6DCE8",
-    borderWidth: 0.5,
+    borderWidth: 1,
   },
   topShadow: {
     shadowOffset: {

@@ -11,11 +11,12 @@ import {
 } from "react-native";
 const windowWidth = Dimensions.get("window").width;
 
-const NeuMorphRec = ({ children, size, style, color }) => {
+const NeuMorphRec = ({ children, size, style, color, onPress }) => {
   return (
     <View style={styles.topShadow}>
       <View style={styles.bottomShadow}>
         <TouchableOpacity
+          onPress={onPress}
           style={[
             styles.inner,
             {

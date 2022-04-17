@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -18,13 +18,21 @@ import {
 } from "@expo-google-fonts/nunito";
 import NeuMorphRec from "../components/NeuMorphRec";
 import NeuMorph from "../components/NeuMorph";
+import { useDispatch, useSelector } from "react-redux";
 
-const Companions = ({ navigator }) => {
+const Companions = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
     Nunito_400Regular,
     Nunito_600SemiBold,
     Nunito_700Bold,
   });
+
+  const dispatch = useDispatch();
+  const { companions, events } = useSelector((state) => state.companions);
+
+  useEffect(() => {
+    //  console.log(companions);
+  }, [companions, events]);
 
   if (!fontsLoaded) {
     return null;
@@ -62,49 +70,65 @@ const Companions = ({ navigator }) => {
       </View>
       <View style={{ width: "100%", flex: 1 }}>
         <View style={styles.listContainer}>
-          <NeuMorphRec style={{ borderRadius: 10 }}>
-            <View style={styles.component}>
-              <View style={styles.contentContainer}>
-                <View style={styles.imageContainer}>
-                  <Image
-                    style={styles.image}
-                    source={{
-                      uri: "https://c4.wallpaperflare.com/wallpaper/746/883/660/earth-plant-aloe-vera-wallpaper-preview.jpg",
-                    }}
-                  />
-                </View>
-                <View style={styles.textContainer}>
-                  <Text style={styles.name}>Aloe</Text>
-                  <Text style={styles.lastAction}>Reminders: Watering</Text>
-                </View>
-                <NeuMorph style={{ left: 40 }} size={40}>
-                  <Icon name="dots-vertical" color="#3F4A62" size={28} />
-                </NeuMorph>
-              </View>
-            </View>
-          </NeuMorphRec>
+          {companions &&
+            companions.map((item, key) => (
+              <NeuMorphRec
+                style={{ borderRadius: 10, marginTop: 15 }}
+                key={key}
+                onPress={
+                  () =>
+                    navigation.navigate("CompanionOverview", {
+                      name: item.name,
+                      notes: item.notes,
+                      image: item.image,
+                      companionID: item.companion,
+                      type: item.companion_type,
+                    })
+                  // navigation.navigate("CompanionOverview", {
+                  //   name: item.name,
 
-          <NeuMorphRec style={{ borderRadius: 10, marginTop: 20 }}>
-            <View style={styles.component}>
-              <View style={styles.contentContainer}>
-                <View style={styles.imageContainer}>
-                  <Image
-                    style={styles.image}
-                    source={{
-                      uri: "https://tractive.com/blog/wp-content/uploads/2018/11/header_image_home_alone_dog-768x576.jpg",
-                    }}
-                  />
+                  //    projectId: item.id,
+                  //    uid: item.user.id,
+                  //    participants: item.participants,
+                  // //     caption: item.caption,
+                  // //     description: item.description,
+                  // })
+                }
+              >
+                <View style={styles.component}>
+                  <View style={styles.contentContainer}>
+                    <View style={styles.imageContainer}>
+                      <Image
+                        style={styles.image}
+                        source={{
+                          uri: item.image,
+                        }}
+                      />
+                    </View>
+                    <View style={styles.textContainer}>
+                      <Text style={styles.name}>{item.name}</Text>
+                      <View style={{ flexDirection: "row" }}>
+                        <Text style={styles.lastAction}>Reminders:</Text>
+                        {events &&
+                          events
+                            .filter((x) => x.companion_id === item.companion)
+                            .map((item, key) => (
+                              <Text
+                                key={key}
+                                style={[styles.lastAction, { marginLeft: 2 }]}
+                              >
+                                {item.action}
+                              </Text>
+                            ))}
+                      </View>
+                    </View>
+                    <NeuMorph style={{ left: 40 }} size={40}>
+                      <Icon name="dots-vertical" color="#3F4A62" size={28} />
+                    </NeuMorph>
+                  </View>
                 </View>
-                <View style={styles.textContainer}>
-                  <Text style={styles.name}>Charlie</Text>
-                  <Text style={styles.lastAction}>Reminders: Feeding</Text>
-                </View>
-                <NeuMorph style={{ left: 40 }} size={40}>
-                  <Icon name="dots-vertical" color="#3F4A62" size={28} />
-                </NeuMorph>
-              </View>
-            </View>
-          </NeuMorphRec>
+              </NeuMorphRec>
+            ))}
         </View>
       </View>
     </View>
@@ -151,7 +175,7 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     flexDirection: "column",
-    marginTop: 30,
+    marginTop: 10,
     width: "85%",
     alignSelf: "center",
   },

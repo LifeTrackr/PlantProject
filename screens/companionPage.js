@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -19,14 +19,25 @@ import {
 } from "@expo-google-fonts/nunito";
 import NeuMorphRec from "../components/NeuMorphRec";
 import NeuMorph from "../components/NeuMorph";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getIcon,
+  getPercentage,
+  getTime,
+  getTypeIcon,
+  getFrequency,
+} from "../filters/Filters";
 
-const CompanionPage = ({ navigator }) => {
+const CompanionPage = ({ route, navigation }) => {
   let [fontsLoaded] = useFonts({
     Nunito_400Regular,
     Nunito_600SemiBold,
     Nunito_700Bold,
   });
-
+  const { companions, events } = useSelector((state) => state.companions);
+  const { name, notes, image, companionID, type } = route.params;
+  console.log(notes);
+  console.log(companionID);
   if (!fontsLoaded) {
     return null;
   }
@@ -39,7 +50,7 @@ const CompanionPage = ({ navigator }) => {
               <Icon name="chevron-left" color="#3F4A62" size={35} />
             </NeuMorph>
             <View>
-              <Text style={styles.headerText}>Aloe</Text>
+              <Text style={styles.headerText}>{name}</Text>
             </View>
             <NeuMorph>
               <Icon name="delete-outline" size={27} color="#3F4A62" />
@@ -50,7 +61,12 @@ const CompanionPage = ({ navigator }) => {
           <View>
             <View style={{ flexDirection: "row" }}>
               <Text style={styles.subHeading}>Plant</Text>
-              <Icon name="leaf" size={20} color="#3F4A62" style={{ left: 5 }} />
+              <Icon
+                name={getTypeIcon(type)}
+                size={20}
+                color="#3F4A62"
+                style={{ left: 5 }}
+              />
             </View>
 
             <View style={styles.imageInfoContainer}>
@@ -58,106 +74,89 @@ const CompanionPage = ({ navigator }) => {
                 <Image
                   style={{ width: "96%", height: "96%", borderRadius: 10 }}
                   source={{
-                    uri: "https://c4.wallpaperflare.com/wallpaper/746/883/660/earth-plant-aloe-vera-wallpaper-preview.jpg",
+                    uri: image,
                   }}
                 />
               </NeuMorphRec>
               <NeuMorphRec style={styles.infoContainer}>
                 <Text style={styles.infoText}>Info</Text>
-                <Text style={styles.notesText}>Add Notes</Text>
+                {notes ? (
+                  <Text style={styles.notesText}>{notes}</Text>
+                ) : (
+                  <Text style={styles.notesText}>Add Notes</Text>
+                )}
+
                 <Text></Text>
               </NeuMorphRec>
             </View>
           </View>
-          <View style={{ marginTop: 25, flex: 1 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Text style={styles.subHeading}>Reminders</Text>
-              <Icon name="plus" size={27} color="#3F4A62" />
-            </View>
-            <NeuMorphRec
-              style={{ borderRadius: 10, marginTop: 20, width: "100%" }}
-            >
-              <View style={styles.component}>
-                <View style={styles.remindersContainer}>
-                  <Icon
-                    name="water-outline"
-                    size={35}
-                    color="#3F4A62"
-                    style={{ left: 3 }}
-                  />
-                  <View style={styles.textContainer}>
-                    <Text style={styles.name}>Watering</Text>
-                    <Text style={styles.lastAction}>Each 10 days</Text>
-                  </View>
-                  <NeuMorph size={40} style={{ right: 5 }}>
-                    <View
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        overflow: "hidden",
-                        borderRadius: 100,
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                      }}
-                    >
-                      <View
-                        style={{
-                          height: "50%",
-                          backgroundColor: "#83E7FD",
-                          width: "100%",
-                        }}
-                      ></View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: 25,
+            }}
+          >
+            <Text style={styles.subHeading}>Reminders</Text>
+            <Icon name="plus" size={27} color="#3F4A62" />
+          </View>
+          <View style={{ flex: 1 }}>
+            {events &&
+              events
+                .filter((x) => x.companion_id === companionID)
+                .map((item, key) => (
+                  <NeuMorphRec
+                    key={key}
+                    style={{ borderRadius: 10, marginTop: 20, width: "100%" }}
+                  >
+                    <View style={styles.component}>
+                      <View style={styles.remindersContainer}>
+                        <Icon
+                          name={getIcon(item.action)[0]}
+                          size={35}
+                          color="#3F4A62"
+                          style={{ left: 3 }}
+                        />
+                        <View style={styles.textContainer}>
+                          <Text style={styles.name}>{item.name}</Text>
+                          <Text style={styles.lastAction}>
+                            Each {getFrequency(item.frequency).frequency}{" "}
+                            {getFrequency(item.frequency).dataType}
+                          </Text>
+                        </View>
+                        <NeuMorph size={40} style={{ right: 5 }}>
+                          <View
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              overflow: "hidden",
+                              borderRadius: 100,
+                              justifyContent: "flex-end",
+                              alignItems: "center",
+                            }}
+                          >
+                            <View
+                              style={{
+                                height: getPercentage(
+                                  item.next_trigger,
+                                  item.frequency
+                                ),
+                                backgroundColor: getIcon(item.action)[1],
+                                width: "100%",
+                              }}
+                            ></View>
+                          </View>
+                          <Text style={styles.iconReminder}>
+                            {getTime(item.last_trigger).duration}
+                            {getTime(item.last_trigger).dateType} ago
+                          </Text>
+                        </NeuMorph>
+                      </View>
                     </View>
-                    <Text style={styles.iconReminder}>2h ago</Text>
-                  </NeuMorph>
-                </View>
-              </View>
-            </NeuMorphRec>
-            <NeuMorphRec
-              style={{ borderRadius: 10, marginTop: 20, width: "100%" }}
-            >
-              <View style={styles.component}>
-                <View style={styles.remindersContainer}>
-                  <Icon
-                    name="water-outline"
-                    size={35}
-                    color="#3F4A62"
-                    style={{ left: 3 }}
-                  />
-                  <View style={styles.textContainer}>
-                    <Text style={styles.name}>Watering</Text>
-                    <Text style={styles.lastAction}>Each 10 days</Text>
-                  </View>
-                  <NeuMorph size={40} style={{ right: 5 }}>
-                    <View
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        overflow: "hidden",
-                        borderRadius: 100,
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                      }}
-                    >
-                      <View
-                        style={{
-                          height: "50%",
-                          backgroundColor: "#83E7FD",
-                          width: "100%",
-                        }}
-                      ></View>
-                    </View>
-                    <Text style={styles.iconReminder}>2h ago</Text>
-                  </NeuMorph>
-                </View>
-              </View>
-            </NeuMorphRec>
+                  </NeuMorphRec>
+                ))}
           </View>
         </View>
       </View>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -18,13 +18,19 @@ import {
 } from "@expo-google-fonts/nunito";
 import NeuMorphRec from "../components/NeuMorphRec";
 import NeuMorph from "../components/NeuMorph";
+import * as SecureStore from "expo-secure-store";
 
-const Settings = ({ navigator }) => {
+const Settings = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
     Nunito_400Regular,
     Nunito_600SemiBold,
     Nunito_700Bold,
   });
+
+  const LogOut = async () => {
+    await SecureStore.deleteItemAsync("token");
+    // navigation.navigate("SignIn");
+  };
 
   if (!fontsLoaded) {
     return null;
@@ -40,7 +46,7 @@ const Settings = ({ navigator }) => {
             <View>
               <Text style={styles.headerText}>Settings</Text>
             </View>
-            <NeuMorph>
+            <NeuMorph onPress={() => LogOut()}>
               <Icon name="export-variant" size={24} color="#3F4A62" />
             </NeuMorph>
           </View>
