@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  FlatList,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
@@ -23,12 +24,17 @@ import {
   getPercentage,
   getTime,
   getTypeIcon,
+  fetchData,
 } from "../filters/Filters";
-import { NavigationContainer } from "@react-navigation/native";
 
-const Reminders = ({ navigation }) => {
+const Reminders = ({ navigation, route }) => {
   const dispatch = useDispatch();
+  const { tokenID } = route.params;
   const { companions, events } = useSelector((state) => state.companions);
+  const [refreshing, setRefreshing] = useState(false);
+  const [filterData, setFilterData] = useState([]);
+  const [search, setSearch] = useState("");
+
   let [fontsLoaded] = useFonts({
     Nunito_400Regular,
     Nunito_600SemiBold,
@@ -36,13 +42,30 @@ const Reminders = ({ navigation }) => {
   });
 
   useEffect(() => {
-    // if (events.length != 0) {
-    //   console.log(getTime(events[0].last_trigger));
-    //   // let duration = moment.duration(lastTrigger.diff(now));
-    //   // console.log(duration);
-    // }
-    console.log(events);
+    setRefreshing(false);
+    setFilterData(events);
   }, [events, companions]);
+
+  const searchFilter = (text) => {
+    if (text) {
+      const newData = events.filter((item) => {
+        const itemData = item.name ? item.name.toUpperCase() : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilterData(newData);
+      setSearch(text);
+    } else {
+      setFilterData(events);
+      setSearch(text);
+    }
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchData(tokenID, dispatch);
+    setRefreshing(false);
+  };
 
   if (!fontsLoaded) {
     return null;
@@ -75,17 +98,30 @@ const Reminders = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Search"
+          value={search}
           placeholderTextColor="#3F4A62"
+          underlineColorAndroid="transparent"
+          onChangeText={(text) => searchFilter(text)}
         />
       </View>
       <View style={{ width: "100%", flex: 1 }}>
         <View style={styles.listContainer}>
-          {events &&
-            events.map((item, key) => (
+          <FlatList
+            style={{
+              heigth: "100%",
+              width: "100%",
+              paddingHorizontal: "7.5%",
+            }}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            numColumns={2}
+            horizontal={false}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            data={filterData}
+            renderItem={({ item }) => (
               <NeuMorph
                 size={170}
                 style={{ borderRadius: 10, marginTop: 24 }}
-                key={key}
                 onPress={() =>
                   navigation.navigate("CompanionOverview", {
                     name: companions.filter(
@@ -116,7 +152,7 @@ const Reminders = ({ navigation }) => {
                   <View style={styles.bottomContainer}>
                     <View style={styles.textContainer}>
                       <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.name}>{item.companion_name}</Text>
+                        <Text style={styles.name}>{item.name}</Text>
                         <Icon
                           style={{ left: 8, top: 3 }}
                           name={getTypeIcon(item.companion_type)}
@@ -166,7 +202,9 @@ const Reminders = ({ navigation }) => {
                   </View>
                 </View>
               </NeuMorph>
-            ))}
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </View>
       </View>
     </View>
@@ -213,12 +251,11 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     marginTop: 10,
-    width: "85%",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
+    width: "100%",
     alignSelf: "center",
+    alignItems: "center",
   },
   component: {
     width: 170,

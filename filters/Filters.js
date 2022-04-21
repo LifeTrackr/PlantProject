@@ -1,5 +1,7 @@
 import moment, { suppressDeprecationWarnings } from "moment";
 import { duration } from "moment";
+import { getCompanions, getEvents } from "../redux/reducers/companions";
+import { useDispatch, useSelector } from "react-redux";
 
 export const getPercentage = (time, freq) => {
   let now = moment().format();
@@ -77,7 +79,7 @@ export const getIcon = (type) => {
     return ["watering-can-outline", "#9B6C25"];
   }
   if (type == "clean") {
-    return ["spray-bottle", "#12C9B3"];
+    return ["shower-head", "#12C9B3"];
   }
 };
 
@@ -93,4 +95,9 @@ export const getTypeIcon = (type) => {
     return "tortoise";
   }
   return null;
+};
+
+export const fetchData = (token, dispatch) => {
+  dispatch(getCompanions(token));
+  dispatch(getEvents(token));
 };

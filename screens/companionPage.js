@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
   Image,
+  FlatList,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
@@ -26,18 +27,30 @@ import {
   getTime,
   getTypeIcon,
   getFrequency,
+  fetchData,
 } from "../filters/Filters";
 
 const CompanionPage = ({ route, navigation }) => {
+  const dispatch = useDispatch();
   let [fontsLoaded] = useFonts({
     Nunito_400Regular,
     Nunito_600SemiBold,
     Nunito_700Bold,
   });
   const { companions, events } = useSelector((state) => state.companions);
-  const { name, notes, image, companionID, type } = route.params;
-  console.log(notes);
-  console.log(companionID);
+  const [refreshing, setRefreshing] = useState(false);
+  const { name, notes, image, companionID, type, tokenID } = route.params;
+
+  useEffect(() => {
+    setRefreshing(false);
+  }, [events, companions]);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchData(tokenID, dispatch);
+    setRefreshing(false);
+  };
+
   if (!fontsLoaded) {
     return null;
   }
@@ -102,62 +115,81 @@ const CompanionPage = ({ route, navigation }) => {
             <Text style={styles.subHeading}>Reminders</Text>
             <Icon name="plus" size={27} color="#3F4A62" />
           </View>
-          <View style={{ flex: 1 }}>
-            {events &&
-              events
-                .filter((x) => x.companion_id === companionID)
-                .map((item, key) => (
-                  <NeuMorphRec
-                    key={key}
-                    style={{ borderRadius: 10, marginTop: 20, width: "100%" }}
-                  >
-                    <View style={styles.component}>
-                      <View style={styles.remindersContainer}>
-                        <Icon
-                          name={getIcon(item.action)[0]}
-                          size={35}
-                          color="#3F4A62"
-                          style={{ left: 3 }}
-                        />
-                        <View style={styles.textContainer}>
-                          <Text style={styles.name}>{item.name}</Text>
-                          <Text style={styles.lastAction}>
-                            Each {getFrequency(item.frequency).frequency}{" "}
-                            {getFrequency(item.frequency).dataType}
-                          </Text>
-                        </View>
-                        <NeuMorph size={40} style={{ right: 5 }}>
-                          <View
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              overflow: "hidden",
-                              borderRadius: 100,
-                              justifyContent: "flex-end",
-                              alignItems: "center",
-                            }}
-                          >
-                            <View
-                              style={{
-                                height: getPercentage(
-                                  item.next_trigger,
-                                  item.frequency
-                                ),
-                                backgroundColor: getIcon(item.action)[1],
-                                width: "100%",
-                              }}
-                            ></View>
-                          </View>
-                          <Text style={styles.iconReminder}>
-                            {getTime(item.last_trigger).duration}
-                            {getTime(item.last_trigger).dateType} ago
-                          </Text>
-                        </NeuMorph>
-                      </View>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "column",
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <FlatList
+            style={{
+              width: "100%",
+            }}
+            numColumns={1}
+            horizontal={false}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            data={events}
+            renderItem={({ item }) => (
+              <NeuMorphRec
+                style={{
+                  borderRadius: 10,
+                  marginTop: 20,
+                  width: "85%",
+                  alignSelf: "center",
+                }}
+              >
+                <View style={styles.component}>
+                  <View style={styles.remindersContainer}>
+                    <Icon
+                      name={getIcon(item.action)[0]}
+                      size={35}
+                      color="#3F4A62"
+                      style={{ left: 3 }}
+                    />
+                    <View style={styles.textContainer}>
+                      <Text style={styles.name}>{item.name}</Text>
+                      <Text style={styles.lastAction}>
+                        Each {getFrequency(item.frequency).frequency}{" "}
+                        {getFrequency(item.frequency).dataType}
+                      </Text>
                     </View>
-                  </NeuMorphRec>
-                ))}
-          </View>
+                    <NeuMorph size={40} style={{ right: 5 }}>
+                      <View
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          overflow: "hidden",
+                          borderRadius: 100,
+                          justifyContent: "flex-end",
+                          alignItems: "center",
+                        }}
+                      >
+                        <View
+                          style={{
+                            height: getPercentage(
+                              item.next_trigger,
+                              item.frequency
+                            ),
+                            backgroundColor: getIcon(item.action)[1],
+                            width: "100%",
+                          }}
+                        ></View>
+                      </View>
+                      <Text style={styles.iconReminder}>
+                        {getTime(item.last_trigger).duration}{" "}
+                        {getTime(item.last_trigger).dateType} ago
+                      </Text>
+                    </NeuMorph>
+                  </View>
+                </View>
+              </NeuMorphRec>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </View>
       </View>
     </View>
@@ -187,7 +219,6 @@ const styles = StyleSheet.create({
     marginHorizontal: "6%",
     marginTop: "8%",
     flexDirection: "column",
-    flex: 1,
   },
   subHeading: {
     fontFamily: "Nunito_600SemiBold",
@@ -259,7 +290,8 @@ const styles = StyleSheet.create({
   },
   iconReminder: {
     fontFamily: "Nunito_400Regular",
-    width: 20,
+    width: 23,
+    lineHeight: 12,
     fontSize: 10,
     position: "absolute",
     textAlign: "center",

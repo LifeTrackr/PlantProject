@@ -37,6 +37,7 @@ const SignIn = ({ navigation }) => {
     Nunito_700Bold,
   });
   const { error, message } = useSelector((state) => state.users);
+
   useEffect(() => {
     if (error) {
       showAlert("Unknown error", "Please try again later", "Try Again");
@@ -156,7 +157,7 @@ const SignIn = ({ navigation }) => {
           </View>
         </View>
       </View>
-      <ImageBackground
+      {/* <ImageBackground
         style={{ flex: 1.7 }}
         imageStyle={
           {
@@ -168,7 +169,7 @@ const SignIn = ({ navigation }) => {
         source={{
           uri: "https://wallpaperaccess.com/full/1261211.jpg",
         }}
-      ></ImageBackground>
+      ></ImageBackground> */}
 
       {/* <View
             style={{

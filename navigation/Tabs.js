@@ -22,25 +22,27 @@ import { getUsers, createUser, getToken } from "../redux/reducers/users";
 import * as SecureStore from "expo-secure-store";
 
 const Tab = createBottomTabNavigator();
-const Tabs = () => {
+const Tabs = ({ route, navigation }) => {
+  const { tokenID } = route.params;
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
+        tabBarActiveBackgroundColor: "transparent",
         tabBarStyle: {
-          height: 85,
+          height: 90,
           position: "absolute",
           elevation: 0,
-          backgroundColor: "white",
-          borderRadius: 20,
-          ...styles.shadow,
+          backgroundColor: "#ECF0F3",
+          borderTopWidth: 0,
         },
       }}
     >
       <Tab.Screen
         name="Reminders"
         component={Reminders}
+        initialParams={{ tokenID: tokenID }}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.buttonWrapper}>
@@ -61,6 +63,7 @@ const Tabs = () => {
       <Tab.Screen
         name="Companions"
         component={Companions}
+        initialParams={{ tokenID: tokenID }}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.buttonWrapper}>
@@ -81,6 +84,7 @@ const Tabs = () => {
       <Tab.Screen
         name="Add"
         component={Logs}
+        initialParams={{ tokenID: tokenID }}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.shadow}>
@@ -96,6 +100,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Logs"
+        initialParams={{ tokenID: tokenID }}
         component={Logs}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -116,6 +121,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Settings"
+        initialParams={{ tokenID: tokenID }}
         component={Settings}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -141,14 +147,14 @@ export default Tabs;
 
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: "#FFFFFF",
-    shadowOffset: {
-      width: 6,
-      height: 6,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 14,
-    elevation: 5,
+    // shadowColor: "#1F3666",
+    // shadowOffset: {
+    //   width: 2,
+    //   height: 2,
+    // },
+    // shadowOpacity: 10,
+    // shadowRadius: 9,
+    // elevation: 5,
   },
 
   buttonWrapper: {
@@ -162,8 +168,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "black",
-    height: 70,
-    width: 70,
+    height: 60,
+    width: 60,
     bottom: 5,
     borderRadius: 25,
   },

@@ -51,13 +51,14 @@ const SignUp = ({ navigation }) => {
     console.log(message);
   }, [error, message]);
 
-  const showAlert = (message, description, button) =>
+  const showAlert = (message, description, button) => {
     Alert.alert(message, description, [
       {
         text: button,
         onPress: () => navigation.navigate("SignIn"),
       },
     ]);
+  };
 
   const { handleChange, handleBlur, handleSubmit, values, errors, touched } =
     useFormik({

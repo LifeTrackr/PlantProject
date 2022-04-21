@@ -91,10 +91,12 @@ export default function Main() {
             name="Landing"
             component={Tabs}
             options={{ headerShown: false }}
+            initialParams={{ tokenID: tokenID }}
           />
           <Stack.Screen
             name="CompanionOverview"
             component={CompanionPage}
+            initialParams={{ tokenID: tokenID }}
             options={{ headerShown: false }}
           />
 

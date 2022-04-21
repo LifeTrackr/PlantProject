@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  FlatList,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
@@ -19,20 +20,47 @@ import {
 import NeuMorphRec from "../components/NeuMorphRec";
 import NeuMorph from "../components/NeuMorph";
 import { useDispatch, useSelector } from "react-redux";
+import { getCompanions } from "../redux/reducers/companions";
+import { fetchData } from "../filters/Filters";
 
-const Companions = ({ navigation }) => {
+const Companions = ({ navigation, route }) => {
   let [fontsLoaded] = useFonts({
     Nunito_400Regular,
     Nunito_600SemiBold,
     Nunito_700Bold,
   });
-
+  const { tokenID } = route.params;
   const dispatch = useDispatch();
   const { companions, events } = useSelector((state) => state.companions);
+  const [refreshing, setRefreshing] = useState(false);
+  const [filterData, setFilterData] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    //  console.log(companions);
+    setRefreshing(false);
+    setFilterData(companions);
   }, [companions, events]);
+
+  const searchFilter = (text) => {
+    if (text) {
+      const newData = companions.filter((item) => {
+        const itemData = item.name ? item.name.toUpperCase() : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilterData(newData);
+      setSearch(text);
+    } else {
+      setFilterData(companions);
+      setSearch(text);
+    }
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchData(tokenID, dispatch);
+    setRefreshing(false);
+  };
 
   if (!fontsLoaded) {
     return null;
@@ -65,34 +93,34 @@ const Companions = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Search"
+          value={search}
           placeholderTextColor="#3F4A62"
+          underlineColorAndroid="transparent"
+          onChangeText={(text) => searchFilter(text)}
         />
       </View>
       <View style={{ width: "100%", flex: 1 }}>
         <View style={styles.listContainer}>
-          {companions &&
-            companions.map((item, key) => (
+          <FlatList
+            style={{
+              width: "100%",
+            }}
+            numColumns={1}
+            horizontal={false}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            data={filterData}
+            renderItem={({ item }) => (
               <NeuMorphRec
-                style={{ borderRadius: 10, marginTop: 15 }}
-                key={key}
-                onPress={
-                  () =>
-                    navigation.navigate("CompanionOverview", {
-                      name: item.name,
-                      notes: item.notes,
-                      image: item.image,
-                      companionID: item.companion,
-                      type: item.companion_type,
-                    })
-                  // navigation.navigate("CompanionOverview", {
-                  //   name: item.name,
-
-                  //    projectId: item.id,
-                  //    uid: item.user.id,
-                  //    participants: item.participants,
-                  // //     caption: item.caption,
-                  // //     description: item.description,
-                  // })
+                style={{ borderRadius: 10, marginTop: 15, alignSelf: "center" }}
+                onPress={() =>
+                  navigation.navigate("CompanionOverview", {
+                    name: item.name,
+                    notes: item.notes,
+                    image: item.image,
+                    companionID: item.companion,
+                    type: item.companion_type,
+                  })
                 }
               >
                 <View style={styles.component}>
@@ -128,7 +156,9 @@ const Companions = ({ navigation }) => {
                   </View>
                 </View>
               </NeuMorphRec>
-            ))}
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </View>
       </View>
     </View>
@@ -176,8 +206,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     marginTop: 10,
-    width: "85%",
+    width: "100%",
     alignSelf: "center",
+    alignItems: "center",
   },
   component: {
     width: "100%",
