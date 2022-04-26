@@ -26,6 +26,8 @@ import {
   getTypeIcon,
   fetchData,
 } from "../filters/Filters";
+import { updateEvent, getEvents } from "../redux/reducers/companions";
+import { getCompanions } from "../redux/reducers/companions";
 
 const Reminders = ({ navigation, route }) => {
   const dispatch = useDispatch();
@@ -67,6 +69,12 @@ const Reminders = ({ navigation, route }) => {
     setRefreshing(false);
   };
 
+  const onPress = (id) => {
+    dispatch(updateEvent(id, tokenID));
+    dispatch(getEvents(tokenID));
+    dispatch(getCompanions(tokenID));
+  };
+
   if (!fontsLoaded) {
     return null;
   }
@@ -99,7 +107,7 @@ const Reminders = ({ navigation, route }) => {
           style={styles.input}
           placeholder="Search"
           value={search}
-          placeholderTextColor="#3F4A62"
+          placeholderTextColor="#748492"
           underlineColorAndroid="transparent"
           onChangeText={(text) => searchFilter(text)}
         />
@@ -152,11 +160,17 @@ const Reminders = ({ navigation, route }) => {
                   <View style={styles.bottomContainer}>
                     <View style={styles.textContainer}>
                       <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.name}>{item.name}</Text>
+                        <Text
+                          style={styles.name}
+                          numberOfLines={1}
+                          ellipsizeMode={"tail"}
+                        >
+                          {item.name}
+                        </Text>
                         <Icon
-                          style={{ left: 8, top: 3 }}
+                          style={{ top: 3, marginLeft: 8 }}
                           name={getTypeIcon(item.companion_type)}
-                          color="#323232"
+                          color="#3F4A62"
                           size={16}
                         />
                       </View>
@@ -166,6 +180,7 @@ const Reminders = ({ navigation, route }) => {
                       </Text>
                     </View>
                     <NeuMorph
+                      onPress={() => onPress(item.event_id)}
                       size={40}
                       style={{
                         right: 5,
@@ -194,7 +209,7 @@ const Reminders = ({ navigation, route }) => {
                       </View>
                       <Icon
                         name={getIcon(item.action)[0]}
-                        color="#8C8C8C"
+                        color="#748492"
                         size={27}
                         style={{ position: "absolute" }}
                       />
@@ -228,7 +243,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontFamily: "Nunito_600SemiBold",
     fontSize: 23,
-    color: "#3E3E3E",
+    color: "#3F4A62",
   },
   searchBar: {
     width: "85%",
@@ -288,14 +303,15 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito_700Bold",
     fontSize: 19,
     left: 3,
-    color: "#3E3E3E",
+    color: "#3F4A62",
     bottom: 1,
+    maxWidth: 100,
   },
   lastAction: {
     fontFamily: "Nunito_400Regular",
     fontSize: 14,
     left: 3,
     bottom: 2,
-    color: "#6B6B6B",
+    color: "#748492",
   },
 });

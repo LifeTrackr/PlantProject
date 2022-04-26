@@ -17,6 +17,8 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Logs from "../screens/Logs";
 import Companions from "../screens/Companions";
 import { LinearGradient } from "expo-linear-gradient";
+import AddNew from "../screens/Add/addNew";
+
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers, createUser, getToken } from "../redux/reducers/users";
 import * as SecureStore from "expo-secure-store";
@@ -45,16 +47,23 @@ const Tabs = ({ route, navigation }) => {
         initialParams={{ tokenID: tokenID }}
         options={{
           tabBarIcon: ({ focused }) => (
-            <View style={styles.buttonWrapper}>
+            <View
+              style={
+                focused
+                  ? [styles.buttonWrapper, { backgroundColor: "#3F4A62" }]
+                  : styles.buttonWrapper
+              }
+            >
               <Icon
                 name="alarm"
+                style={{ top: 4 }}
                 size={focused ? 35 : 32}
-                color={focused ? "#6183C7" : "#3F4A62"}
+                color={focused ? "#ECF0F3" : "#3F4A62"}
               />
               <Icon
                 name="circle-small"
                 size={focused ? 20 : 20}
-                color={focused ? "#6183C7" : "transparent"}
+                color={focused ? "#ECF0F3" : "transparent"}
               />
             </View>
           ),
@@ -66,16 +75,23 @@ const Tabs = ({ route, navigation }) => {
         initialParams={{ tokenID: tokenID }}
         options={{
           tabBarIcon: ({ focused }) => (
-            <View style={styles.buttonWrapper}>
+            <View
+              style={
+                focused
+                  ? [styles.buttonWrapper, { backgroundColor: "#3F4A62" }]
+                  : styles.buttonWrapper
+              }
+            >
               <Icon
                 name="camera-iris"
+                style={{ top: 4 }}
                 size={focused ? 37 : 32}
-                color={focused ? "#6183C7" : "#3F4A62"}
+                color={focused ? "#ECF0F3" : "#3F4A62"}
               />
               <Icon
                 name="circle-small"
                 size={focused ? 20 : 20}
-                color={focused ? "#6183C7" : "transparent"}
+                color={focused ? "#ECF0F3" : "transparent"}
               />
             </View>
           ),
@@ -83,17 +99,14 @@ const Tabs = ({ route, navigation }) => {
       />
       <Tab.Screen
         name="Add"
-        component={Logs}
-        initialParams={{ tokenID: tokenID }}
+        component={AddNew}
+        initialParams={{ tokenID: tokenID, showModal: true }}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.shadow}>
-              <LinearGradient
-                style={styles.buttonAddWrapper}
-                colors={["#6183C7", "#1F3666"]}
-              >
-                <Icon name="plus" size={37} color={"white"} />
-              </LinearGradient>
+              <View style={styles.buttonAddWrapper}>
+                <Icon name="plus" size={37} color={"#3F4A62"} />
+              </View>
             </View>
           ),
         }}
@@ -104,16 +117,23 @@ const Tabs = ({ route, navigation }) => {
         component={Logs}
         options={{
           tabBarIcon: ({ focused }) => (
-            <View style={styles.buttonWrapper}>
+            <View
+              style={
+                focused
+                  ? [styles.buttonWrapper, { backgroundColor: "#3F4A62" }]
+                  : styles.buttonWrapper
+              }
+            >
               <Icon
                 name="console"
+                style={{ top: 4 }}
                 size={focused ? 37 : 32}
-                color={focused ? "#6183C7" : "#3F4A62"}
+                color={focused ? "#ECF0F3" : "#3F4A62"}
               />
               <Icon
                 name="circle-small"
                 size={focused ? 20 : 20}
-                color={focused ? "#6183C7" : "transparent"}
+                color={focused ? "#ECF0F3" : "transparent"}
               />
             </View>
           ),
@@ -125,16 +145,23 @@ const Tabs = ({ route, navigation }) => {
         component={Settings}
         options={{
           tabBarIcon: ({ focused }) => (
-            <View style={styles.buttonWrapper}>
+            <View
+              style={
+                focused
+                  ? [styles.buttonWrapper, { backgroundColor: "#3F4A62" }]
+                  : styles.buttonWrapper
+              }
+            >
               <Icon
                 name="cog"
+                style={{ top: 4 }}
                 size={focused ? 37 : 32}
-                color={focused ? "#6183C7" : "#3F4A62"}
+                color={focused ? "#ECF0F3" : "#3F4A62"}
               />
               <Icon
                 name="circle-small"
-                size={focused ? 20 : 20}
-                color={focused ? "#6183C7" : "transparent"}
+                size={20}
+                color={focused ? "#ECF0F3" : "transparent"}
               />
             </View>
           ),
@@ -160,17 +187,20 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     alignItems: "center",
     justifyContent: "center",
-    top: 15,
-    height: 75,
-    width: 75,
+    top: 14,
+    height: 65,
+    width: 65,
+    borderRadius: 25,
   },
   buttonAddWrapper: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "black",
-    height: 60,
-    width: 60,
-    bottom: 5,
-    borderRadius: 25,
+    backgroundColor: "#D9DDE5",
+    height: 65,
+    width: 65,
+    bottom: 15,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: "#3F4A62",
   },
 });

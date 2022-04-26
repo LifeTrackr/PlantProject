@@ -10,6 +10,7 @@ import {
   ScrollView,
   Image,
   FlatList,
+  Modal,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
@@ -29,6 +30,7 @@ import {
   getFrequency,
   fetchData,
 } from "../filters/Filters";
+import { TaskType } from "../filters/Pickers";
 
 const CompanionPage = ({ route, navigation }) => {
   const dispatch = useDispatch();
@@ -44,11 +46,17 @@ const CompanionPage = ({ route, navigation }) => {
   useEffect(() => {
     setRefreshing(false);
   }, [events, companions]);
+  const [isModalVisible, setisModalVisible] = useState(false);
+  const [data, setData] = useState(null);
 
   const handleRefresh = () => {
     setRefreshing(true);
     fetchData(tokenID, dispatch);
     setRefreshing(false);
+  };
+
+  const changeModalVisibility = (bool) => {
+    setisModalVisible(bool);
   };
 
   if (!fontsLoaded) {
@@ -59,7 +67,7 @@ const CompanionPage = ({ route, navigation }) => {
       <View style={{ alignSelf: "stretch", flex: 1 }}>
         <View style={{ marginHorizontal: 32, marginTop: 60 }}>
           <View style={styles.topContainer}>
-            <NeuMorph>
+            <NeuMorph onPress={() => navigation.goBack()}>
               <Icon name="chevron-left" color="#3F4A62" size={35} />
             </NeuMorph>
             <View>
@@ -132,7 +140,10 @@ const CompanionPage = ({ route, navigation }) => {
             horizontal={false}
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            data={events}
+            // companions.filter(
+            //   (x) => x.companion === item.companion_id
+            // )[0].name
+            data={events.filter((x) => x.companion_id === companionID)}
             renderItem={({ item }) => (
               <NeuMorphRec
                 style={{
@@ -140,6 +151,10 @@ const CompanionPage = ({ route, navigation }) => {
                   marginTop: 20,
                   width: "85%",
                   alignSelf: "center",
+                }}
+                onPress={() => {
+                  changeModalVisibility(true);
+                  setData(item);
                 }}
               >
                 <View style={styles.component}>
@@ -186,6 +201,19 @@ const CompanionPage = ({ route, navigation }) => {
                     </NeuMorph>
                   </View>
                 </View>
+                <Modal
+                  transparent={true}
+                  animationType="fade"
+                  visible={isModalVisible}
+                  nRequestClose={() => changeModalVisibility(false)}
+                >
+                  <TaskType
+                    changeModalVisibility={changeModalVisibility}
+                    item={data}
+                    token={tokenID}
+                    setRefreshing={setRefreshing}
+                  />
+                </Modal>
               </NeuMorphRec>
             )}
             keyExtractor={(item, index) => index.toString()}
@@ -213,7 +241,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontFamily: "Nunito_600SemiBold",
     fontSize: 23,
-    color: "#3E3E3E",
+    color: "#3F4A62",
   },
   contentContainer: {
     marginHorizontal: "6%",
@@ -223,7 +251,7 @@ const styles = StyleSheet.create({
   subHeading: {
     fontFamily: "Nunito_600SemiBold",
     fontSize: 18,
-    color: "#3E3E3E",
+    color: "#3F4A62",
   },
   imageInfoContainer: {
     height: 145,
@@ -251,11 +279,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     left: 10,
     top: 7,
+    color: "#3F4A62",
   },
   notesText: {
     fontFamily: "Nunito_700Bold",
     fontSize: 12,
-    color: "#6B6B6B",
+    color: "#748492",
     alignSelf: "center",
   },
   component: {
@@ -281,16 +310,16 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: "Nunito_700Bold",
     fontSize: 17,
-    color: "#3E3E3E",
+    color: "#3F4A62",
   },
   lastAction: {
     fontFamily: "Nunito_400Regular",
     fontSize: 12,
-    color: "#6B6B6B",
+    color: "#748492",
   },
   iconReminder: {
     fontFamily: "Nunito_400Regular",
-    width: 23,
+    width: 26,
     lineHeight: 12,
     fontSize: 10,
     position: "absolute",
