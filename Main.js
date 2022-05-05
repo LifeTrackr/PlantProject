@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Provider } from "react-redux";
 import store from "./redux/configureStore";
@@ -15,6 +15,7 @@ import { getCompanions, getEvents } from "./redux/reducers/companions";
 import * as SecureStore from "expo-secure-store";
 import LottieView from "lottie-react-native";
 import AddNewCompanion from "./screens/Add/addNewCompanion";
+import AddNewReminder from "./screens/Add/addNewReminder";
 import { View, Text, StyleSheet } from "react-native";
 const Stack = createStackNavigator();
 
@@ -94,6 +95,11 @@ export default function Main() {
           <Stack.Screen
             name="AddNewCompanion"
             component={AddNewCompanion}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AddNewReminder"
+            component={AddNewReminder}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

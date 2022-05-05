@@ -85,7 +85,9 @@ const AddNewCompanion = ({ navigation, route }) => {
               <Icon name="close" color="#3F4A62" size={35} />
             </NeuMorph>
             <View>
-              <Text style={styles.headerText}>New Companion</Text>
+              <Text style={styles.headerText}>
+                {values.name ? values.name : "New Companion"}
+              </Text>
             </View>
             <NeuMorph onPress={handleSubmit}>
               <Icon name="check" size={27} color="#3F4A62" />
@@ -93,7 +95,7 @@ const AddNewCompanion = ({ navigation, route }) => {
           </View>
           <View
             style={{
-              marginTop: 80,
+              marginTop: 50,
               width: "100%",
               flexDirection: "column",
             }}
@@ -123,7 +125,7 @@ const AddNewCompanion = ({ navigation, route }) => {
             disabled={true}
             style={{
               borderRadius: 10,
-              marginTop: 20,
+              marginTop: 7,
               width: "100%",
               height: 100,
             }}
@@ -141,7 +143,7 @@ const AddNewCompanion = ({ navigation, route }) => {
           </NeuMorphRec>
           <NeuMorphRec
             onPress={() => changeModalVisibility(true)}
-            style={{ borderRadius: 10, marginTop: 40, width: "100%" }}
+            style={{ borderRadius: 10, marginTop: 33, width: "100%" }}
           >
             <View style={styles.emailContainer}>
               <Text style={[styles.placeholder, { color: "#7E7E7E" }]}>
@@ -195,7 +197,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontFamily: "Nunito_400Regular",
-    fontSize: 22,
+    fontSize: 20,
     color: "#3E3E3E",
   },
   emailContainer: {

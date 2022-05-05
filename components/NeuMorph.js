@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
       height: -12,
     },
     shadowOpacity: 1,
-    shadowRadius: 9,
+    shadowRadius: 8,
     shadowColor: "#FBFFFF",
   },
   bottomShadow: {

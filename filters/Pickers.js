@@ -265,6 +265,12 @@ const AddModal = (props) => {
               <Text style={styles.choice}>Companion</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate("AddNewReminder", {
+                  tokenID: props.tokenID,
+                });
+                props.changeModalVisibility(false);
+              }}
               style={{
                 height: "42%",
                 width: "100%",
@@ -335,6 +341,57 @@ const CompanionTypes = (props) => {
   }
 };
 
+const CompanionID = (props) => {
+  let [fontsLoaded] = useFonts({
+    Nunito_400Regular,
+    Nunito_600SemiBold,
+    Nunito_700Bold,
+  });
+  const { companions, events } = useSelector((state) => state.companions);
+  const onPressItem = (item) => {
+    props.changeModalVisibility(false);
+    props.companionID(item.companion, item.name);
+  };
+
+  const option = companions.map((item, index) => {
+    return (
+      <TouchableOpacity
+        style={styles.option}
+        key={index}
+        onPress={() => onPressItem(item)}
+      >
+        <Text style={styles.text}>{item.name} </Text>
+      </TouchableOpacity>
+    );
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  } else {
+    return (
+      <TouchableOpacity
+        style={{
+          flex: 1,
+          backgroundColor: "rgba(52, 52, 52, 0.8)",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        onPress={() => props.changeModalVisibility(false)}
+      >
+        <View
+          style={{
+            width: WIDTH - 20,
+            backgroundColor: "white",
+            borderRadius: 10,
+          }}
+        >
+          <ScrollView>{option}</ScrollView>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -346,6 +403,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderBottomWidth: 1,
     borderColor: "#3F4A62",
+    flexDirection: "row",
+    justifyContent: "center",
   },
   text: {
     margin: 20,
@@ -381,4 +440,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { TaskType, AddModal, CompanionTypes };
+export { TaskType, AddModal, CompanionTypes, CompanionID };

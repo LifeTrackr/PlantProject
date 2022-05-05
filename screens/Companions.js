@@ -140,13 +140,13 @@ const Companions = ({ navigation, route }) => {
                         {events &&
                           events
                             .filter((x) => x.companion_id === item.companion)
-                            .map((item, key) => (
+                            .map((item, key, { length }) => (
                               <Text
                                 key={key}
                                 style={[styles.lastAction, { marginLeft: 2 }]}
                               >
                                 {item.action}
-                                {key == events.length - 1 ? null : ","}
+                                {length - 1 === key ? null : ","}
                               </Text>
                             ))}
                       </View>
