@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  SaveAreaView,
-  TouchableOpacity,
-  TextInput,
-  Image,
-  FlatList,
-  Modal,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput, Modal } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
   useFonts,
@@ -27,7 +16,6 @@ import {
   getEvents,
 } from "../../redux/reducers/companions";
 import { useFormik, Formik, yupToFormErrors } from "formik";
-import Reminders from "../Reminders";
 import * as yup from "yup";
 import { CompanionTypes } from "../../filters/Pickers";
 
@@ -39,7 +27,6 @@ const AddNewCompanion = ({ navigation, route }) => {
   });
   const dispatch = useDispatch();
   const { tokenID } = route.params;
-  //console.log(tokenID);
 
   const { companions, events } = useSelector((state) => state.companions);
   const [isModalVisible, setisModalVisible] = useState(false);

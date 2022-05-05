@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  SaveAreaView,
-  TouchableOpacity,
-  TextInput,
-  Image,
-  FlatList,
-  Modal,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput, Modal } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
   useFonts,
@@ -21,13 +10,7 @@ import {
 import NeuMorphRec from "../../components/NeuMorphRec";
 import NeuMorph from "../../components/NeuMorph";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getCompanions,
-  createCompanion,
-  getEvents,
-} from "../../redux/reducers/companions";
 import { useFormik, yupToFormErrors } from "formik";
-import Reminders from "../Reminders";
 import * as yup from "yup";
 import { CompanionID } from "../../filters/Pickers";
 

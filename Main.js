@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Provider } from "react-redux";
-import store from "./redux/configureStore";
 import { useDispatch, useSelector } from "react-redux";
 import Tabs from "./navigation/Tabs";
 import SignIn from "./screens/Login/SignIn";
 import SignUp from "./screens/Login/SignUp";
 import CompanionPage from "./screens/companionPage";
-import Reminders from "./screens/Reminders";
-import Companions from "./screens/Companions";
 import Settings from "./screens/Settings";
 import { getCompanions, getEvents } from "./redux/reducers/companions";
 import * as SecureStore from "expo-secure-store";

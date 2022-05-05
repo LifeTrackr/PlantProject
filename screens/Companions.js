@@ -20,7 +20,6 @@ import {
 import NeuMorphRec from "../components/NeuMorphRec";
 import NeuMorph from "../components/NeuMorph";
 import { useDispatch, useSelector } from "react-redux";
-import { getCompanions } from "../redux/reducers/companions";
 import { fetchData } from "../filters/Filters";
 
 const Companions = ({ navigation, route }) => {

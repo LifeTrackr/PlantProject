@@ -1,7 +1,5 @@
-import moment, { suppressDeprecationWarnings } from "moment";
-import { duration } from "moment";
+import moment from "moment";
 import { getCompanions, getEvents } from "../redux/reducers/companions";
-import { useDispatch, useSelector } from "react-redux";
 
 export const getPercentage = (time, freq) => {
   var moment = require("moment-timezone");

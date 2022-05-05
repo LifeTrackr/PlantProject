@@ -121,17 +121,6 @@ const Tabs = ({ route, navigation }) => {
 export default Tabs;
 
 const styles = StyleSheet.create({
-  shadow: {
-    // shadowColor: "#1F3666",
-    // shadowOffset: {
-    //   width: 2,
-    //   height: 2,
-    // },
-    // shadowOpacity: 10,
-    // shadowRadius: 9,
-    // elevation: 5,
-  },
-
   buttonWrapper: {
     alignItems: "center",
     justifyContent: "center",

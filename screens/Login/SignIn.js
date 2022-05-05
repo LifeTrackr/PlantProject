@@ -1,15 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  SaveAreaView,
-  TouchableOpacity,
-  TextInput,
-  ImageBackground,
-  Alert,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
   useFonts,
@@ -21,7 +11,7 @@ import { useFormik, Formik } from "formik";
 import NeuMorph from "../../components/NeuMorph";
 import NeuMorphRec from "../../components/NeuMorphRec";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsers, createUser, getToken } from "../../redux/reducers/users";
+import { getToken } from "../../redux/reducers/users";
 import * as yup from "yup";
 
 const LoginSchema = yup.object().shape({

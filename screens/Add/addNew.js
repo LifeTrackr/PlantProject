@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  SaveAreaView,
-  TouchableOpacity,
-  TextInput,
-  Image,
-  FlatList,
-  Modal,
-} from "react-native";
+import { View, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
   useFonts,
@@ -18,13 +7,8 @@ import {
   Nunito_600SemiBold,
   Nunito_700Bold,
 } from "@expo-google-fonts/nunito";
-import NeuMorphRec from "../../components/NeuMorphRec";
-import NeuMorph from "../../components/NeuMorph";
 import { useDispatch, useSelector } from "react-redux";
-import { getCompanions } from "../../redux/reducers/companions";
-import { fetchData } from "../../filters/Filters";
 import { AddModal } from "../../filters/Pickers";
-import Reminders from "../Reminders";
 const AddNew = ({ navigation, route }) => {
   let [fontsLoaded] = useFonts({
     Nunito_400Regular,

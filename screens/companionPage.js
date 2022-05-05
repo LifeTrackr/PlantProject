@@ -1,17 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  SaveAreaView,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-  Image,
-  FlatList,
-  Modal,
-} from "react-native";
+import { View, Text, StyleSheet, Image, FlatList, Modal } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
   useFonts,

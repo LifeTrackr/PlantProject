@@ -23,7 +23,6 @@ import {
   modifyEvent,
   getCompanions,
   getEvents,
-  updateEvent,
   deleteEvent,
 } from "../redux/reducers/companions";
 

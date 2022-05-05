@@ -29,6 +29,6 @@ export function* watcherSaga() {
   yield takeLatest(GET_COMPANIONS, handleGetCompanions);
   yield takeLatest(GET_EVENTS, handleGetEvents);
   yield takeLatest(MODIFY_EVENT, handleModifyEvent);
-  yield takeLatest(UPDATE_EVENT, handleDeleteEvent);
+  yield takeLatest(DELETE_EVENT, handleDeleteEvent);
   yield takeLatest(CREATE_COMPANION, handleCreateCompanion);
 }

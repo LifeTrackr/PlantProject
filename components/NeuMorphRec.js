@@ -1,15 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  SaveAreaView,
-  TouchableOpacity,
-  TextInput,
-  Dimensions,
-} from "react-native";
-const windowWidth = Dimensions.get("window").width;
+import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 
 const NeuMorphRec = ({ children, size, style, color, onPress, disabled }) => {
   return (

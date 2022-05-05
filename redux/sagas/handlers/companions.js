@@ -88,7 +88,7 @@ export function* handleUpdateEvent(action) {
     console.log(data);
   } catch (error) {
     console.log(error.response);
-    yield put(setCompanionsFailure(error));
+    yield put(setUpdateEventFailure(error));
   }
 }
 

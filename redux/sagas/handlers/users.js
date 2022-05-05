@@ -15,7 +15,6 @@ import {
   requestCreateUser,
   requestToken,
 } from "../requests/users";
-import qs from "qs";
 import * as SecureStore from "expo-secure-store";
 
 export function* handleGetUsers(action) {

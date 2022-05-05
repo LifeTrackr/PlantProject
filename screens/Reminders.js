@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   TextInput,
   Image,
   FlatList,
@@ -17,8 +16,6 @@ import {
 } from "@expo-google-fonts/nunito";
 import NeuMorph from "../components/NeuMorph";
 import { useDispatch, useSelector } from "react-redux";
-import moment, { suppressDeprecationWarnings } from "moment";
-import { duration } from "moment";
 import {
   getIcon,
   getPercentage,

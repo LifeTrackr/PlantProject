@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  SaveAreaView,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 
 const NeuMorph = ({ children, size, style, color, onPress }) => {
   return (
